@@ -2,7 +2,24 @@
 
 A Backstage plugin for visualizing and analyzing AWS EC2 costs from S3-stored Cost and Usage Reports (CUR).
 
+[![npm version](https://img.shields.io/npm/v/@letthem/backstage-plugin-cost-insights)](https://www.npmjs.com/package/@letthem/backstage-plugin-cost-insights)
 [![CI](https://github.com/letthem/backstage-plugin-cost-insights/actions/workflows/ci.yaml/badge.svg)](https://github.com/letthem/backstage-plugin-cost-insights/actions/workflows/ci.yaml)
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+
+
+## 📸 Screenshots
+
+### Overview - Total EC2 Cost Breakdown
+![Cost Overview](docs/images/cost-insights-1.png)
+
+### Current Month Daily Trend
+![Daily Trend](docs/images/cost-insights-2.png)
+
+### Top Cost Resources This Month
+![Top Resources](docs/images/cost-insights-3.png)
+
+### Monthly Comparison (6/12 Months)
+![Monthly Comparison](docs/images/cost-insights-4.png)
 
 ## Features
 
