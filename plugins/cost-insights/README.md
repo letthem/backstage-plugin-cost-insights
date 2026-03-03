@@ -28,7 +28,6 @@ import { CostInsightsPage } from '@internal/plugin-cost-insights';
 - On load, frontend calls backend `/config` to get:
   - environments
   - defaultEnvironment
-  - monthlyLookbackMonths
 - Environment toggle is rendered dynamically from backend config.
 - Data request uses `/product/ec2/insights?intervals=<start>/<end>&environment=<env>`.
 
@@ -38,7 +37,6 @@ import { CostInsightsPage } from '@internal/plugin-cost-insights';
 costInsights:
   environments: [dev, stg, prod]
   defaultEnvironment: prod
-  monthlyLookbackMonths: 6
   auth:
     allowUnauthenticated: false
   s3:

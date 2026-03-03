@@ -53,7 +53,6 @@ interface EC2Resource {
 interface CostInsightsPluginConfig {
   environments: string[];
   defaultEnvironment: string;
-  monthlyLookbackMonths: number;
 }
 
 export function EC2CostPage() {
