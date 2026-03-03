@@ -14,12 +14,6 @@ export interface Config {
     defaultEnvironment?: string;
 
     /**
-     * Number of months for monthly trend aggregation.
-     * @default 6
-     */
-    monthlyLookbackMonths?: number;
-
-    /**
      * HTTP auth behavior for cost-insights backend routes.
      */
     auth?: {

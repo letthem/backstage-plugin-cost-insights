@@ -10,8 +10,9 @@ A Backstage plugin for visualizing and analyzing AWS EC2 costs from S3-stored Co
 - 📈 **Daily cost trends** - Track cost changes over time with interactive charts
 - 📅 **Date range filtering** - Analyze costs for any custom date range
 - 🌍 **Multi-environment support** - Switch between dev, staging, production, etc.
-- 🔮 **Monthly forecasting** - Estimate month-end costs based on current trends
+- 🔮 **Month-end forecasting** - Estimate current month's total cost based on daily trends
 - 🎯 **Top cost resources** - Identify highest cost contributors
+- 📊 **Monthly comparison** - View 6 or 12 months of cost trends across resource types
 
 ## Plugin Architecture
 
@@ -68,7 +69,6 @@ costInsights:
     - stg
     - prod
   defaultEnvironment: prod
-  monthlyLookbackMonths: 6
   auth:
     allowUnauthenticated: false
   s3:

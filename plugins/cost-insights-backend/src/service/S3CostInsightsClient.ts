@@ -17,7 +17,6 @@ export class S3CostInsightsClient {
   async getEC2Insights(
     intervals: string,
     environment: string,
-    monthlyLookbackMonths: number = 6,
   ) {
     const [startDateStr, endDateStr] = intervals.split('/');
     const startDate = DateTime.fromISO(startDateStr ?? '', { setZone: true });
@@ -81,9 +80,10 @@ export class S3CostInsightsClient {
 
     const totalCost = ec2Resources.reduce((sum, r) => sum + r.totalCost, 0);
 
+    // Always fetch 12 months for frontend flexibility (6/12 months toggle)
     const monthlyData = await this.s3Client.queryMonthlyEC2Costs(
       environment,
-      monthlyLookbackMonths,
+      12,
     );
 
     const entities = ec2Resources.map(resource => ({

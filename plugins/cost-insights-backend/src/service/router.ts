@@ -38,8 +38,6 @@ export async function createRouter(
   const defaultEnvironment = environments.includes(configuredDefaultEnvironment)
     ? configuredDefaultEnvironment
     : environments[0];
-  const monthlyLookbackMonths =
-    costInsightsConfig?.getOptionalNumber('monthlyLookbackMonths') ?? 6;
 
   if (!environments.includes(configuredDefaultEnvironment)) {
     logger.warn(
@@ -66,7 +64,6 @@ export async function createRouter(
     res.json({
       environments,
       defaultEnvironment,
-      monthlyLookbackMonths,
     });
   });
 
@@ -130,7 +127,6 @@ export async function createRouter(
     const insights = await costInsightsClient.getEC2Insights(
       intervals,
       environment,
-      monthlyLookbackMonths,
     );
     res.json({ ...insights, environment });
   });

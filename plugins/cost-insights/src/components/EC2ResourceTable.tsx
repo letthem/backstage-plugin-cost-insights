@@ -96,12 +96,12 @@ function EC2ResourceRow({ resource }: EC2ResourceRowProps) {
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={4}>
           <Collapse in={open} timeout="auto" unmountOnExit>
-            <Box margin={2} sx={{ backgroundColor: 'background.default' }}>
+            <Box sx={{ p: 4, m: 2, backgroundColor: 'background.default', borderRadius: 1 }}>
               <Grid2 container spacing={3}>
                 <Grid2 size={{ sm: 12, md: 4 }}>
                   <Typography
                     variant="h6"
-                    sx={{ mt: 2, mb: 1, fontWeight: 600 }}
+                    sx={{ mb: 2, fontWeight: 600 }}
                   >
                     Resource Info
                   </Typography>
@@ -133,7 +133,7 @@ function EC2ResourceRow({ resource }: EC2ResourceRowProps) {
                 <Grid2 size={{ sm: 12, md: 8 }}>
                   <Typography
                     variant="h6"
-                    sx={{ mt: 2, mb: 1, fontWeight: 600 }}
+                    sx={{ mb: 2, fontWeight: 600 }}
                   >
                     Daily Cost Trend
                   </Typography>
@@ -171,7 +171,7 @@ function EC2ResourceRow({ resource }: EC2ResourceRowProps) {
                             <Line
                               type="monotone"
                               dataKey="cost"
-                              stroke="#1976d2"
+                              stroke="#1fd9a7"
                               strokeWidth={2}
                               dot={{ r: 2 }}
                             />

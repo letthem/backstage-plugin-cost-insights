@@ -1,10 +1,9 @@
-import TrendingDownIcon from '@mui/icons-material/TrendingDown';
-import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import {
   Box,
+  Button,
+  ButtonGroup,
   Card,
   CardContent,
-  Chip,
   Paper,
   Table,
   TableBody,
@@ -15,7 +14,7 @@ import {
   Typography,
 } from '@mui/material';
 import Grid2 from '@mui/material/Grid2';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import {
   Bar,
   BarChart,
@@ -28,6 +27,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
+import { DateTime } from 'luxon';
 
 interface EC2Resource {
   resourceId: string;
@@ -59,9 +59,13 @@ interface EC2OverviewProps {
     vpc: number;
     total: number;
   }>;
+  startDate?: DateTime | null;
+  endDate?: DateTime | null;
 }
 
-export function EC2Overview({ resources, monthlyData = [] }: EC2OverviewProps) {
+export function EC2Overview({ resources, monthlyData = [], startDate, endDate }: EC2OverviewProps) {
+  const [monthsToShow, setMonthsToShow] = useState<6 | 12>(6);
+
   const instancesCost = resources
     .filter(r => r.resourceType === 'instance')
     .reduce((sum, r) => sum + r.totalCost, 0);
@@ -94,35 +98,6 @@ export function EC2Overview({ resources, monthlyData = [] }: EC2OverviewProps) {
     dataTransferCost +
     vpcCost;
 
-  const calculateGrowth = (
-    currentValue: number,
-    type:
-      | 'total'
-      | 'instances'
-      | 'volume'
-      | 'elasticIp'
-      | 'natGateway'
-      | 'dataTransfer'
-      | 'vpc',
-  ) => {
-    if (monthlyData.length < 2) return null;
-
-    const lastMonth = monthlyData[monthlyData.length - 2];
-    const previousValue = type === 'total' ? lastMonth.total : lastMonth[type];
-
-    if (previousValue === 0) return null;
-
-    const growth = ((currentValue - previousValue) / previousValue) * 100;
-    return growth;
-  };
-
-  const totalGrowth = calculateGrowth(totalCost, 'total');
-  const instancesGrowth = calculateGrowth(instancesCost, 'instances');
-  const volumeGrowth = calculateGrowth(volumeCost, 'volume');
-  const elasticIpGrowth = calculateGrowth(elasticIpCost, 'elasticIp');
-  const natGatewayGrowth = calculateGrowth(natGatewayCost, 'natGateway');
-  const dataTransferGrowth = calculateGrowth(dataTransferCost, 'dataTransfer');
-  const vpcGrowth = calculateGrowth(vpcCost, 'vpc');
 
   const dailyTrendData = useMemo(() => {
     const dailyMap = new Map<
@@ -210,13 +185,23 @@ export function EC2Overview({ resources, monthlyData = [] }: EC2OverviewProps) {
   const predictedMonthEndCost = useMemo(() => {
     if (dailyTrendData.length === 0) return null;
 
-    const today = new Date();
-    const daysInMonth = new Date(
-      today.getFullYear(),
-      today.getMonth() + 1,
-      0,
-    ).getDate();
-    const currentDay = today.getDate();
+    // Only show forecast when the ENTIRE current month is selected
+    const now = DateTime.now();
+    const currentMonthStart = now.startOf('month');
+
+    // Check if startDate and endDate represent the current month period
+    if (!startDate || !endDate) return null;
+
+    const isCurrentMonthStart = startDate.hasSame(currentMonthStart, 'day');
+    const isCurrentMonth = endDate.hasSame(now, 'month') && endDate.hasSame(now, 'year');
+
+    if (!isCurrentMonthStart || !isCurrentMonth) return null;
+
+    const daysInMonth = now.daysInMonth || 30;
+    const currentDay = now.day;
+
+    // Avoid division by zero
+    if (currentDay <= 0) return null;
 
     const avgDailyCost = totalCost / currentDay;
 
@@ -229,22 +214,8 @@ export function EC2Overview({ resources, monthlyData = [] }: EC2OverviewProps) {
       remainingDays,
       avgDailyCost,
     };
-  }, [dailyTrendData, totalCost]);
+  }, [dailyTrendData, totalCost, startDate, endDate]);
 
-  const renderTrendChip = (growth: number | null) => {
-    if (growth === null) return null;
-
-    const isPositive = growth > 0;
-    return (
-      <Chip
-        icon={isPositive ? <TrendingUpIcon /> : <TrendingDownIcon />}
-        label={`${isPositive ? '+' : ''}${growth.toFixed(1)}%`}
-        size="small"
-        color={isPositive ? 'secondary' : 'primary'}
-        sx={{ fontWeight: 600 }}
-      />
-    );
-  };
 
   return (
     <Box>
@@ -261,10 +232,9 @@ export function EC2Overview({ resources, monthlyData = [] }: EC2OverviewProps) {
               <Typography sx={{ fontSize: 14, color: 'text.secondary', mb: 1 }}>
                 Total EC2 Cost
               </Typography>
-              <Typography sx={{ fontSize: 32, fontWeight: 600, mb: 1 }}>
+              <Typography sx={{ fontSize: 32, fontWeight: 600 }}>
                 ${totalCost.toFixed(2)}
               </Typography>
-              {renderTrendChip(totalGrowth)}
             </CardContent>
           </Card>
         </Grid2>
@@ -281,10 +251,9 @@ export function EC2Overview({ resources, monthlyData = [] }: EC2OverviewProps) {
               <Typography sx={{ fontSize: 14, color: 'text.secondary', mb: 1 }}>
                 EC2 Instances
               </Typography>
-              <Typography sx={{ fontSize: 32, fontWeight: 600, mb: 1 }}>
+              <Typography sx={{ fontSize: 32, fontWeight: 600 }}>
                 ${instancesCost.toFixed(2)}
               </Typography>
-              {renderTrendChip(instancesGrowth)}
             </CardContent>
           </Card>
         </Grid2>
@@ -301,10 +270,9 @@ export function EC2Overview({ resources, monthlyData = [] }: EC2OverviewProps) {
               <Typography sx={{ fontSize: 14, color: 'text.secondary', mb: 1 }}>
                 Volumes
               </Typography>
-              <Typography sx={{ fontSize: 32, fontWeight: 600, mb: 1 }}>
+              <Typography sx={{ fontSize: 32, fontWeight: 600 }}>
                 ${volumeCost.toFixed(2)}
               </Typography>
-              {renderTrendChip(volumeGrowth)}
             </CardContent>
           </Card>
         </Grid2>
@@ -321,10 +289,9 @@ export function EC2Overview({ resources, monthlyData = [] }: EC2OverviewProps) {
               <Typography sx={{ fontSize: 14, color: 'text.secondary', mb: 1 }}>
                 Elastic IP
               </Typography>
-              <Typography sx={{ fontSize: 32, fontWeight: 600, mb: 1 }}>
+              <Typography sx={{ fontSize: 32, fontWeight: 600 }}>
                 ${elasticIpCost.toFixed(2)}
               </Typography>
-              {renderTrendChip(elasticIpGrowth)}
             </CardContent>
           </Card>
         </Grid2>
@@ -341,10 +308,9 @@ export function EC2Overview({ resources, monthlyData = [] }: EC2OverviewProps) {
               <Typography sx={{ fontSize: 14, color: 'text.secondary', mb: 1 }}>
                 NAT Gateway
               </Typography>
-              <Typography sx={{ fontSize: 32, fontWeight: 600, mb: 1 }}>
+              <Typography sx={{ fontSize: 32, fontWeight: 600 }}>
                 ${natGatewayCost.toFixed(2)}
               </Typography>
-              {renderTrendChip(natGatewayGrowth)}
             </CardContent>
           </Card>
         </Grid2>
@@ -361,10 +327,9 @@ export function EC2Overview({ resources, monthlyData = [] }: EC2OverviewProps) {
               <Typography sx={{ fontSize: 14, color: 'text.secondary', mb: 1 }}>
                 Data Transfer
               </Typography>
-              <Typography sx={{ fontSize: 32, fontWeight: 600, mb: 1 }}>
+              <Typography sx={{ fontSize: 32, fontWeight: 600 }}>
                 ${dataTransferCost.toFixed(2)}
               </Typography>
-              {renderTrendChip(dataTransferGrowth)}
             </CardContent>
           </Card>
         </Grid2>
@@ -381,10 +346,9 @@ export function EC2Overview({ resources, monthlyData = [] }: EC2OverviewProps) {
               <Typography sx={{ fontSize: 14, color: 'text.secondary', mb: 1 }}>
                 VPC
               </Typography>
-              <Typography sx={{ fontSize: 32, fontWeight: 600, mb: 1 }}>
+              <Typography sx={{ fontSize: 32, fontWeight: 600 }}>
                 ${vpcCost.toFixed(2)}
               </Typography>
-              {renderTrendChip(vpcGrowth)}
             </CardContent>
           </Card>
         </Grid2>
@@ -445,7 +409,7 @@ export function EC2Overview({ resources, monthlyData = [] }: EC2OverviewProps) {
             <Line
               type="monotone"
               dataKey="Instances"
-              stroke="#1976d2"
+              stroke="#6ac2e5"
               strokeWidth={2}
             />
             <Line
@@ -463,7 +427,7 @@ export function EC2Overview({ resources, monthlyData = [] }: EC2OverviewProps) {
             <Line
               type="monotone"
               dataKey="NAT Gateway"
-              stroke="#6ac2e5"
+              stroke="#1976d2"
               strokeWidth={2}
             />
             <Line
@@ -534,12 +498,28 @@ export function EC2Overview({ resources, monthlyData = [] }: EC2OverviewProps) {
 
       {monthlyData.length > 0 && (
         <>
-          <Typography variant="h6" sx={{ pt: 6, pb: 2, fontWeight: 600 }}>
-            Monthly Comparison (Last 6 Months)
-          </Typography>
+          <Box sx={{ pt: 6, pb: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Typography variant="h6" sx={{ fontWeight: 600 }}>
+              Monthly Comparison
+            </Typography>
+            <ButtonGroup size="small" variant="outlined">
+              <Button
+                variant={monthsToShow === 6 ? 'contained' : 'outlined'}
+                onClick={() => setMonthsToShow(6)}
+              >
+                6 Months
+              </Button>
+              <Button
+                variant={monthsToShow === 12 ? 'contained' : 'outlined'}
+                onClick={() => setMonthsToShow(12)}
+              >
+                12 Months
+              </Button>
+            </ButtonGroup>
+          </Box>
           <Box sx={{ mt: 3, mb: 3 }}>
             <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={monthlyData}>
+              <BarChart data={monthlyData.slice(-monthsToShow)}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
                 <XAxis dataKey="month" tick={{ fontSize: 12 }} />
                 <YAxis tick={{ fontSize: 12 }} />
@@ -552,7 +532,7 @@ export function EC2Overview({ resources, monthlyData = [] }: EC2OverviewProps) {
                 <Bar
                   dataKey="instances"
                   stackId="a"
-                  fill="#1976d2"
+                  fill="#6ac2e5"
                   name="Instances"
                 />
                 <Bar
@@ -570,7 +550,7 @@ export function EC2Overview({ resources, monthlyData = [] }: EC2OverviewProps) {
                 <Bar
                   dataKey="natGateway"
                   stackId="a"
-                  fill="#6ac2e5"
+                  fill="#1976d2"
                   name="NAT Gateway"
                 />
                 <Bar

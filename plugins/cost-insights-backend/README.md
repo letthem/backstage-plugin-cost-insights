@@ -20,7 +20,6 @@ costInsights:
     - stg
     - prod
   defaultEnvironment: prod
-  monthlyLookbackMonths: 6
   auth:
     allowUnauthenticated: false
   s3:

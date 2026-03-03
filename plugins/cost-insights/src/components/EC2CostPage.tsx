@@ -355,50 +355,67 @@ export function EC2CostPage() {
           (resources.length > 0 || monthlyData.length > 0) && (
             <TabbedLayout>
               <TabbedLayout.Route path="/" title="Overview">
-                <EC2Overview resources={resources} monthlyData={monthlyData} />
-              </TabbedLayout.Route>
-
-              <TabbedLayout.Route path="/instances" title="EC2 Instances">
-                <EC2ResourceTable
-                  resources={instanceResources}
-                  title="EC2 Instances"
+                <EC2Overview
+                  resources={resources}
+                  monthlyData={monthlyData}
+                  startDate={startDate}
+                  endDate={endDate}
                 />
               </TabbedLayout.Route>
 
-              <TabbedLayout.Route path="/volumes" title="Volumes">
-                <EC2ResourceTable
-                  resources={volumeResources}
-                  title="Volumes & Snapshots"
-                />
-              </TabbedLayout.Route>
+              {instanceResources.length > 0 && (
+                <TabbedLayout.Route path="/instances" title="EC2 Instances">
+                  <EC2ResourceTable
+                    resources={instanceResources}
+                    title="EC2 Instances"
+                  />
+                </TabbedLayout.Route>
+              )}
 
-              <TabbedLayout.Route path="/elastic-ip" title="Elastic IP">
-                <EC2ResourceTable
-                  resources={elasticIpResources}
-                  title="Elastic IP Addresses"
-                />
-              </TabbedLayout.Route>
+              {volumeResources.length > 0 && (
+                <TabbedLayout.Route path="/volumes" title="Volumes">
+                  <EC2ResourceTable
+                    resources={volumeResources}
+                    title="Volumes & Snapshots"
+                  />
+                </TabbedLayout.Route>
+              )}
 
-              <TabbedLayout.Route path="/nat-gateway" title="NAT Gateway">
-                <EC2ResourceTable
-                  resources={natGatewayResources}
-                  title="NAT Gateway"
-                />
-              </TabbedLayout.Route>
+              {elasticIpResources.length > 0 && (
+                <TabbedLayout.Route path="/elastic-ip" title="Elastic IP">
+                  <EC2ResourceTable
+                    resources={elasticIpResources}
+                    title="Elastic IP Addresses"
+                  />
+                </TabbedLayout.Route>
+              )}
 
-              <TabbedLayout.Route path="/data-transfer" title="Data Transfer">
-                <EC2ResourceTable
-                  resources={dataTransferResources}
-                  title="Data Transfer"
-                />
-              </TabbedLayout.Route>
+              {natGatewayResources.length > 0 && (
+                <TabbedLayout.Route path="/nat-gateway" title="NAT Gateway">
+                  <EC2ResourceTable
+                    resources={natGatewayResources}
+                    title="NAT Gateway"
+                  />
+                </TabbedLayout.Route>
+              )}
 
-              <TabbedLayout.Route path="/vpc" title="VPC">
-                <EC2ResourceTable
-                  resources={vpcResources}
-                  title="VPC Endpoints"
-                />
-              </TabbedLayout.Route>
+              {dataTransferResources.length > 0 && (
+                <TabbedLayout.Route path="/data-transfer" title="Data Transfer">
+                  <EC2ResourceTable
+                    resources={dataTransferResources}
+                    title="Data Transfer"
+                  />
+                </TabbedLayout.Route>
+              )}
+
+              {vpcResources.length > 0 && (
+                <TabbedLayout.Route path="/vpc" title="VPC">
+                  <EC2ResourceTable
+                    resources={vpcResources}
+                    title="VPC Endpoints"
+                  />
+                </TabbedLayout.Route>
+              )}
             </TabbedLayout>
           )}
       </Content>
