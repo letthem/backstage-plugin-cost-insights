@@ -1,0 +1,43 @@
+{
+  "name": "root",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Backstage plugin for AWS cost insights and analysis",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/letthem/backstage-plugin-cost-insights.git"
+  },
+  "engines": {
+    "node": ">=18 <23"
+  },
+  "workspaces": {
+    "packages": [
+      "plugins/*"
+    ]
+  },
+  "packageManager": "yarn@4.4.1",
+  "scripts": {
+    "build": "backstage-cli repo build --all",
+    "build:all": "backstage-cli repo build --all",
+    "lint": "backstage-cli repo lint",
+    "lint:all": "backstage-cli repo lint --since origin/main",
+    "tsc": "tsc",
+    "tsc:full": "tsc --skipLibCheck false --incremental false",
+    "clean": "backstage-cli repo clean",
+    "test": "backstage-cli repo test",
+    "test:all": "backstage-cli repo test --coverage",
+    "prettier:check": "prettier --check .",
+    "prettier:fix": "prettier --write ."
+  },
+  "devDependencies": {
+    "@backstage/cli": "^0.29.3",
+    "prettier": "^2.3.2",
+    "typescript": "~5.8.0"
+  },
+  "prettier": {
+    "semi": true,
+    "singleQuote": true,
+    "trailingComma": "all"
+  }
+}

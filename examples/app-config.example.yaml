@@ -1,0 +1,27 @@
+# Cost Insights Plugin Configuration Example
+
+# Basic configuration for AWS S3-based cost insights
+costInsights:
+  s3:
+    # AWS region where your S3 bucket is located
+    region: 'ap-northeast-2'
+
+    # S3 bucket name containing cost and usage reports
+    bucket: 'your-cost-reports-bucket'
+
+    # Optional: AWS profile name for local development with AWS SSO
+    # Comment out or remove for production deployments using IAM roles
+    profile: 'your-aws-sso-profile'
+# Production example using IRSA (IAM Roles for Service Accounts) on EKS
+# costInsights:
+#   s3:
+#     region: 'us-east-1'
+#     bucket: 'production-cost-reports'
+# No profile needed - uses pod's IAM role
+
+# Development example with multiple profiles
+# costInsights:
+#   s3:
+#     region: 'ap-northeast-2'
+#     bucket: 'dev-cost-reports'
+#     profile: 'dev-sso-profile'
