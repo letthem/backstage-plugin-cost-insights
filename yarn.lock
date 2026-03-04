@@ -4643,9 +4643,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@letthem/backstage-plugin-cost-insights-backend@workspace:plugins/cost-insights-backend":
+"@letthem/backstage-plugin-aws-cost-insights-backend@workspace:plugins/cost-insights-backend":
   version: 0.0.0-use.local
-  resolution: "@letthem/backstage-plugin-cost-insights-backend@workspace:plugins/cost-insights-backend"
+  resolution: "@letthem/backstage-plugin-aws-cost-insights-backend@workspace:plugins/cost-insights-backend"
   dependencies:
     "@aws-sdk/client-athena": "npm:^3.700.0"
     "@aws-sdk/client-s3": "npm:^3.700.0"
@@ -4664,9 +4664,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@letthem/backstage-plugin-cost-insights@workspace:plugins/cost-insights":
+"@letthem/backstage-plugin-aws-cost-insights@workspace:plugins/cost-insights":
   version: 0.0.0-use.local
-  resolution: "@letthem/backstage-plugin-cost-insights@workspace:plugins/cost-insights"
+  resolution: "@letthem/backstage-plugin-aws-cost-insights@workspace:plugins/cost-insights"
   dependencies:
     "@backstage/cli": "npm:^0.29.3"
     "@backstage/core-app-api": "npm:^1.16.0"

@@ -2,7 +2,7 @@
 
 A Backstage plugin for visualizing and analyzing AWS EC2 costs from S3-stored Cost and Usage Reports (CUR).
 
-[![npm version](https://img.shields.io/npm/v/@letthem/backstage-plugin-cost-insights)](https://www.npmjs.com/package/@letthem/backstage-plugin-cost-insights)
+[![npm version](https://img.shields.io/npm/v/@letthem/backstage-plugin-aws-cost-insights)](https://www.npmjs.com/package/@letthem/backstage-plugin-aws-cost-insights)
 [![CI](https://github.com/letthem/backstage-plugin-cost-insights/actions/workflows/ci.yaml/badge.svg)](https://github.com/letthem/backstage-plugin-cost-insights/actions/workflows/ci.yaml)
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
@@ -35,8 +35,8 @@ A Backstage plugin for visualizing and analyzing AWS EC2 costs from S3-stored Co
 
 This repository contains two packages:
 
-- **`@letthem/backstage-plugin-cost-insights`** - Frontend plugin for visualization
-- **`@letthem/backstage-plugin-cost-insights-backend`** - Backend plugin for data aggregation
+- **`@letthem/backstage-plugin-aws-cost-insights`** - Frontend plugin for visualization
+- **`@letthem/backstage-plugin-aws-cost-insights-backend`** - Backend plugin for data aggregation
 
 ## Installation
 
@@ -44,8 +44,8 @@ This repository contains two packages:
 
 ```bash
 # From your Backstage root directory
-yarn add --cwd packages/app @letthem/backstage-plugin-cost-insights
-yarn add --cwd packages/backend @letthem/backstage-plugin-cost-insights-backend
+yarn add --cwd packages/app @letthem/backstage-plugin-aws-cost-insights
+yarn add --cwd packages/backend @letthem/backstage-plugin-aws-cost-insights-backend
 ```
 
 ### 2. Configure Backend
@@ -59,7 +59,7 @@ const backend = createBackend();
 
 // ... other plugins
 
-backend.add(import('@letthem/backstage-plugin-cost-insights-backend'));
+backend.add(import('@letthem/backstage-plugin-aws-cost-insights-backend'));
 
 backend.start();
 ```
@@ -69,7 +69,7 @@ backend.start();
 Add to `packages/app/src/App.tsx`:
 
 ```tsx
-import { EC2CostPage } from '@letthem/backstage-plugin-cost-insights';
+import { EC2CostPage } from '@letthem/backstage-plugin-aws-cost-insights';
 
 // Inside your routes:
 <Route path="/cost-insights/ec2" element={<EC2CostPage />} />

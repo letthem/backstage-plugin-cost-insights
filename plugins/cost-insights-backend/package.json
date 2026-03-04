@@ -1,5 +1,5 @@
 {
-  "name": "@letthem/backstage-plugin-cost-insights-backend",
+  "name": "@letthem/backstage-plugin-aws-cost-insights-backend",
   "version": "0.1.1",
   "main": "src/index.ts",
   "types": "src/index.ts",
@@ -30,10 +30,10 @@
   "homepage": "https://github.com/letthem/backstage-plugin-cost-insights#readme",
   "backstage": {
     "role": "backend-plugin",
-    "pluginId": "cost-insights",
+    "pluginId": "aws-cost-insights",
     "pluginPackages": [
-      "@letthem/backstage-plugin-cost-insights",
-      "@letthem/backstage-plugin-cost-insights-backend"
+      "@letthem/backstage-plugin-aws-cost-insights",
+      "@letthem/backstage-plugin-aws-cost-insights-backend"
     ]
   },
   "sideEffects": false,
