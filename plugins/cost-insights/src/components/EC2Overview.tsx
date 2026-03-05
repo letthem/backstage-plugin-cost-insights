@@ -232,7 +232,7 @@ export function EC2Overview({ resources, monthlyData = [], startDate, endDate }:
               <Typography sx={{ fontSize: 14, color: 'text.secondary', mb: 1 }}>
                 Total EC2 Cost
               </Typography>
-              <Typography sx={{ fontSize: 32, fontWeight: 600 }}>
+              <Typography sx={{ fontSize: 24, fontWeight: 600 }}>
                 ${totalCost.toFixed(2)}
               </Typography>
             </CardContent>
@@ -251,7 +251,7 @@ export function EC2Overview({ resources, monthlyData = [], startDate, endDate }:
               <Typography sx={{ fontSize: 14, color: 'text.secondary', mb: 1 }}>
                 EC2 Instances
               </Typography>
-              <Typography sx={{ fontSize: 32, fontWeight: 600 }}>
+              <Typography sx={{ fontSize: 24, fontWeight: 600 }}>
                 ${instancesCost.toFixed(2)}
               </Typography>
             </CardContent>
@@ -270,7 +270,7 @@ export function EC2Overview({ resources, monthlyData = [], startDate, endDate }:
               <Typography sx={{ fontSize: 14, color: 'text.secondary', mb: 1 }}>
                 Volumes
               </Typography>
-              <Typography sx={{ fontSize: 32, fontWeight: 600 }}>
+              <Typography sx={{ fontSize: 24, fontWeight: 600 }}>
                 ${volumeCost.toFixed(2)}
               </Typography>
             </CardContent>
@@ -289,7 +289,7 @@ export function EC2Overview({ resources, monthlyData = [], startDate, endDate }:
               <Typography sx={{ fontSize: 14, color: 'text.secondary', mb: 1 }}>
                 Elastic IP
               </Typography>
-              <Typography sx={{ fontSize: 32, fontWeight: 600 }}>
+              <Typography sx={{ fontSize: 24, fontWeight: 600 }}>
                 ${elasticIpCost.toFixed(2)}
               </Typography>
             </CardContent>
@@ -308,7 +308,7 @@ export function EC2Overview({ resources, monthlyData = [], startDate, endDate }:
               <Typography sx={{ fontSize: 14, color: 'text.secondary', mb: 1 }}>
                 NAT Gateway
               </Typography>
-              <Typography sx={{ fontSize: 32, fontWeight: 600 }}>
+              <Typography sx={{ fontSize: 24, fontWeight: 600 }}>
                 ${natGatewayCost.toFixed(2)}
               </Typography>
             </CardContent>
@@ -327,7 +327,7 @@ export function EC2Overview({ resources, monthlyData = [], startDate, endDate }:
               <Typography sx={{ fontSize: 14, color: 'text.secondary', mb: 1 }}>
                 Data Transfer
               </Typography>
-              <Typography sx={{ fontSize: 32, fontWeight: 600 }}>
+              <Typography sx={{ fontSize: 24, fontWeight: 600 }}>
                 ${dataTransferCost.toFixed(2)}
               </Typography>
             </CardContent>
@@ -346,7 +346,7 @@ export function EC2Overview({ resources, monthlyData = [], startDate, endDate }:
               <Typography sx={{ fontSize: 14, color: 'text.secondary', mb: 1 }}>
                 VPC
               </Typography>
-              <Typography sx={{ fontSize: 32, fontWeight: 600 }}>
+              <Typography sx={{ fontSize: 24, fontWeight: 600 }}>
                 ${vpcCost.toFixed(2)}
               </Typography>
             </CardContent>
