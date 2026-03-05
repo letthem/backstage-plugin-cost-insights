@@ -19,8 +19,8 @@ export class S3CostInsightsClient {
     environment: string,
   ) {
     const [startDateStr, endDateStr] = intervals.split('/');
-    const startDate = DateTime.fromISO(startDateStr ?? '', { setZone: true });
-    const endDate = DateTime.fromISO(endDateStr ?? '', { setZone: true });
+    const startDate = DateTime.fromISO(startDateStr ?? '', { zone: 'utc' });
+    const endDate = DateTime.fromISO(endDateStr ?? '', { zone: 'utc' });
 
     if (!startDate.isValid || !endDate.isValid) {
       throw new Error(`Invalid intervals: ${intervals}`);

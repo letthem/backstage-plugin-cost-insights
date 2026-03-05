@@ -95,12 +95,12 @@ export async function createRouter(
     }
 
     const [startStr, endStr] = intervals.split('/');
-    const start = DateTime.fromISO(startStr ?? '', { setZone: true });
-    const end = DateTime.fromISO(endStr ?? '', { setZone: true });
+    const start = DateTime.fromISO(startStr ?? '', { zone: 'utc' });
+    const end = DateTime.fromISO(endStr ?? '', { zone: 'utc' });
     if (!start.isValid || !end.isValid) {
       res
         .status(400)
-        .json({ error: 'intervals must be valid ISO interval: start/end' });
+        .json({ error: 'intervals must be valid ISO date or datetime: start/end' });
       return;
     }
     if (start > end) {

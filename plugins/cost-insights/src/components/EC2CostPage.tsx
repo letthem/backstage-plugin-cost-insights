@@ -64,7 +64,6 @@ export function EC2CostPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [resources, setResources] = useState<EC2Resource[]>([]);
-  const [allResources, setAllResources] = useState<EC2Resource[]>([]);
   const [monthlyData, setMonthlyData] = useState<
     Array<{
       month: string;
@@ -81,7 +80,9 @@ export function EC2CostPage() {
   const [startDate, setStartDate] = useState<DateTime | null>(
     DateTime.now().startOf('month'),
   );
-  const [endDate, setEndDate] = useState<DateTime | null>(DateTime.now());
+  const [endDate, setEndDate] = useState<DateTime | null>(
+    DateTime.now().startOf('day'),  // Start of today, not current time
+  );
 
   const handleStartDateChange = (newDate: DateTime | null) => {
     setStartDate(newDate);
@@ -148,14 +149,12 @@ export function EC2CostPage() {
 
         const baseUrl = await discoveryApi.getBaseUrl('cost-insights');
 
-        const from = (startDate ?? DateTime.now().startOf('month')).startOf(
-          'day',
-        );
-        const to = (endDate ?? DateTime.now()).endOf('day');
+        const from = (startDate ?? DateTime.now().startOf('month'));
+        const to = (endDate ?? DateTime.now());
         if (from > to) {
           throw new Error('From date must be before or equal to To date');
         }
-        const intervals = `${from.toISO()}/${to.toISO()}`;
+        const intervals = `${from.toISODate()}/${to.toISODate()}`;
 
         const response = await fetchApi.fetch(
           `${baseUrl}/product/ec2/insights?intervals=${encodeURIComponent(
@@ -171,8 +170,27 @@ export function EC2CostPage() {
         const ec2Resources = data.entities?.ec2 || [];
         const monthlyDataFromAPI = data.monthlyData || [];
 
-        setAllResources(ec2Resources);
-        setResources(ec2Resources);
+        const filtered = ec2Resources.map((resource: any) => {
+          const filteredDailyCosts = resource.dailyCosts.filter(({ date }: any) => {
+            const dateStr = date.split('T')[0];
+            const startStr = from.toISODate();
+            const endStr = to.toISODate();
+            return dateStr >= (startStr || '') && dateStr <= (endStr || '');
+          });
+
+          const totalCost = filteredDailyCosts.reduce(
+            (sum: number, { cost }: any) => sum + cost,
+            0,
+          );
+
+          return {
+            ...resource,
+            dailyCosts: filteredDailyCosts,
+            totalCost,
+          };
+        });
+
+        setResources(filtered);
         setMonthlyData(monthlyDataFromAPI);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Unknown error');
@@ -184,32 +202,6 @@ export function EC2CostPage() {
     fetchEC2Data();
   }, [discoveryApi, fetchApi, environment, startDate, endDate]);
 
-  useEffect(() => {
-    if (!startDate || !endDate) {
-      setResources(allResources);
-      return;
-    }
-
-    const filtered = allResources.map((resource) => {
-      const filteredDailyCosts = resource.dailyCosts.filter(({ date }) => {
-        const dailyDate = DateTime.fromISO(date);
-        return dailyDate >= startDate && dailyDate <= endDate;
-      });
-
-      const totalCost = filteredDailyCosts.reduce(
-        (sum, { cost }) => sum + cost,
-        0,
-      );
-
-      return {
-        ...resource,
-        dailyCosts: filteredDailyCosts,
-        totalCost,
-      };
-    });
-
-    setResources(filtered);
-  }, [allResources, startDate, endDate]);
 
   const instanceResources = useMemo(() => {
     return resources.filter((r) => r.resourceType === 'instance');
